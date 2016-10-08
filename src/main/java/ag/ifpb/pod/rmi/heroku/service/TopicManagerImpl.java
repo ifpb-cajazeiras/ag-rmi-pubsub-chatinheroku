@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ag.ifpb.pod.rmi.heroku.Debug;
 import ag.ifpb.pod.rmi.heroku.share.Message;
 import ag.ifpb.pod.rmi.heroku.share.Subscriber;
 
@@ -20,14 +21,14 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
 
   //@Override
   public void register(String uuid, Subscriber subscriber) throws RemoteException {
-    System.out.println("registrando um subscriber: " + uuid);
+    Debug.info("registrando um subscriber: " + uuid);
     subscribers.put(uuid, subscriber);
     messages.put(uuid, new ArrayList<Message>());
   }
 
   //@Override
   public void publish(Message message) throws RemoteException {
-    System.out.println("publicando uma mensagem de: " + message.from());
+    Debug.info("publicando uma mensagem de: " + message.from());
     Set<String> uuids = subscribers.keySet();
     for (String uuid : uuids) {
       if (!uuid.equals(message.from())){
@@ -48,7 +49,7 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
       if (notifications.isEmpty()) continue;
       //
       for (Message message : notifications) {
-        System.out.println("notificando " + uuid + " com mensagem de " + message.from());
+        Debug.info("notificando " + uuid + " com mensagem de " + message.from());
         subscriber.update(message);
       }
       //
