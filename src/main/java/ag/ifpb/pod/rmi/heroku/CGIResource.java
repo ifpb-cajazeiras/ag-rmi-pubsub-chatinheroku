@@ -25,7 +25,7 @@ public class CGIResource extends ServerResource {
     bar.setSize(bsize);
     bar.setMediaType(MediaType.APPLICATION_OCTET_STREAM);
     //
-    String url = "http://localhost:" + rmiPort + "";
+    String url = "http://localhost:" + rmiPort + "/";
     ClientResource resource = new ClientResource(url);
     resource.setProtocol(new Protocol("http", "HTTP", "", 1099, "1.0"));
     Representation resp = resource.post(bar);

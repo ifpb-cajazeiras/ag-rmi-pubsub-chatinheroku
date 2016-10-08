@@ -14,7 +14,8 @@ import ag.ifpb.pod.rmi.heroku.share.Subscriber;
 
 @SuppressWarnings("serial")
 public class TopicManagerImpl extends UnicastRemoteObject implements TopicManager {
-  private Map<String, Subscriber> subscribers = new HashMap<String, Subscriber>();
+  //private Map<String, Subscriber> subscribers = new HashMap<String, Subscriber>();
+  private List<String> subscribers = new ArrayList<String>();
   private Map<String, List<Message>> messages = new HashMap<String, List<Message>>();
   
   public TopicManagerImpl() throws RemoteException{}
@@ -22,14 +23,16 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
   //@Override
   public void register(String uuid, Subscriber subscriber) throws RemoteException {
     Debug.info("registrando um subscriber: " + uuid);
-    subscribers.put(uuid, subscriber);
+    //subscribers.put(uuid, subscriber);
+    subscribers.add(uuid);
     messages.put(uuid, new ArrayList<Message>());
   }
 
   //@Override
   public void publish(Message message) throws RemoteException {
     Debug.info("publicando uma mensagem de: " + message.from());
-    Set<String> uuids = subscribers.keySet();
+    //Set<String> uuids = subscribers.keySet();
+    List<String> uuids = subscribers;
     for (String uuid : uuids) {
       if (!uuid.equals(message.from())){
         List<Message> list = messages.get(uuid);
@@ -40,17 +43,18 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
   
   //@Override
   public void notifySubscribers() throws RemoteException {
-    Set<String> uuids = subscribers.keySet();
+    //Set<String> uuids = subscribers.keySet();
+    List<String> uuids = subscribers;
     for (String uuid : uuids) {
       //
-      Subscriber subscriber = subscribers.get(uuid);
+      //Subscriber subscriber = subscribers.get(uuid);
       //
       List<Message> notifications = messages.get(uuid);
       if (notifications.isEmpty()) continue;
       //
       for (Message message : notifications) {
         Debug.info("notificando " + uuid + " com mensagem de " + message.from());
-        subscriber.update(message);
+        //subscriber.update(message);
       }
       //
       notifications.clear();
