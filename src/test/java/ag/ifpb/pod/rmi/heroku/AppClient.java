@@ -38,7 +38,7 @@ public class AppClient {
     Polling polling = (Polling) manager;
     //
     final ChatClientImpl client = new ChatClientImpl(uuid, publisher, polling);
-    topic.register(uuid, client);
+    topic.register(uuid);
     //
     Timer timer = new Timer();
     timer.schedule(new TimerTask() {

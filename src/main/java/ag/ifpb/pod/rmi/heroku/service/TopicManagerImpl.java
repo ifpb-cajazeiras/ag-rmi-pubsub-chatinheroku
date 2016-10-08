@@ -9,7 +9,6 @@ import java.util.Map;
 
 import ag.ifpb.pod.rmi.heroku.Debug;
 import ag.ifpb.pod.rmi.heroku.share.Message;
-import ag.ifpb.pod.rmi.heroku.share.Subscriber;
 
 @SuppressWarnings("serial")
 public class TopicManagerImpl extends UnicastRemoteObject implements TopicManager {
@@ -19,7 +18,7 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
   public TopicManagerImpl() throws RemoteException{}
 
   //@Override
-  public void register(String uuid, Subscriber subscriber) throws RemoteException {
+  public void register(String uuid) throws RemoteException {
     Debug.info("registrando um subscriber: " + uuid);
     subscribers.add(uuid);
     messages.put(uuid, new ArrayList<Message>());
@@ -38,6 +37,8 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
   }
   
   public List<Message> poll(String uuid) throws RemoteException {
+    //
+    Debug.info("verificando se há notificações para: " + uuid);
     //
     List<Message> result = new ArrayList<Message>();
     //

@@ -26,6 +26,7 @@ public class ChatClientImpl extends UnicastRemoteObject implements ChatClient, S
     publisherStub.publish(message);
   }
   
+  //@Override
   public void update() throws RemoteException{
     List<Message> message = pollingStub.poll(subscriberUUID);
     for (Message msg : message) {
