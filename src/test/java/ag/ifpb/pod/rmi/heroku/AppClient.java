@@ -1,5 +1,6 @@
 package ag.ifpb.pod.rmi.heroku;
 
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -15,13 +16,15 @@ import ag.ifpb.pod.rmi.heroku.share.Topic;
 public class AppClient {
 
   @SuppressWarnings("restriction")
-  private static Registry getRegistry() throws RemoteException{
-    String url = "ag-rmi-pubsub-chatinheroku.herokuapp.com";
+  private static Registry getRegistry() throws IOException{
+    //String url = "ag-rmi-pubsub-chatinheroku.herokuapp.com";
+    String url = "localhost";
+    RMISocketFactory.setSocketFactory(new sun.rmi.transport.proxy.RMIHttpToCGISocketFactory());
     return LocateRegistry.getRegistry(
-        url, 1099, new sun.rmi.transport.proxy.RMIHttpToCGISocketFactory());
+        url, 1099, RMISocketFactory.getSocketFactory());
   }
   
-  public static void main(String[] args) throws RemoteException, NotBoundException {
+  public static void main(String[] args) throws NotBoundException, IOException {
     String uuid = UUID.randomUUID().toString();
     //
     Registry registry = getRegistry();

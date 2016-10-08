@@ -5,10 +5,13 @@ import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.restlet.Component;
 import org.restlet.data.Protocol;
 
+import ag.ifpb.pod.rmi.heroku.service.TopicManager;
 import ag.ifpb.pod.rmi.heroku.service.TopicManagerImpl;
 
 public class App {
@@ -20,7 +23,7 @@ public class App {
     //
     Component component = new Component();
     component.getServers().add(Protocol.HTTP, port);
-    component.getServers().add(new Protocol("http", "HTTP", "", 80, "1.0"), port);
+    component.getClients().add(new Protocol("http", "HTTP", "", 1099, "1.0"));
     //
     RMIApplication application = new RMIApplication();
     component.getDefaultHost().attach(application);
@@ -29,9 +32,24 @@ public class App {
   }
   
   private static void startRMIServer() throws AccessException, RemoteException, AlreadyBoundException{
-    //System.setProperty("java.rmi.server.hostname", "localhost");
+    //
+    final TopicManager manager = new TopicManagerImpl();
+    //
     Registry registry = LocateRegistry.createRegistry(1099);
-    registry.bind("__Service__", new TopicManagerImpl());
+    registry.bind("__ChatServer__", manager);
+    //
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+        try {
+          manager.notifySubscribers();
+        } catch (RemoteException e) {
+          e.printStackTrace();
+        }
+      }
+    }, 1000, 10000);//1s, 10s
+    //
   }
   
   public static void main(String[] args) throws Exception {

@@ -20,12 +20,14 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
 
   //@Override
   public void register(String uuid, Subscriber subscriber) throws RemoteException {
+    System.out.println("registrando um subscriber: " + uuid);
     subscribers.put(uuid, subscriber);
     messages.put(uuid, new ArrayList<Message>());
   }
 
   //@Override
   public void publish(Message message) throws RemoteException {
+    System.out.println("publicando uma mensagem de: " + message.from());
     Set<String> uuids = subscribers.keySet();
     for (String uuid : uuids) {
       if (!uuid.equals(message.from())){
@@ -46,6 +48,7 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
       if (notifications.isEmpty()) continue;
       //
       for (Message message : notifications) {
+        System.out.println("notificando " + uuid + " com mensagem de " + message.from());
         subscriber.update(message);
       }
       //
