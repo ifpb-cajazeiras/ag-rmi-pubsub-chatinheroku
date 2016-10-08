@@ -9,6 +9,7 @@ import java.util.Map;
 
 import ag.ifpb.pod.rmi.heroku.Debug;
 import ag.ifpb.pod.rmi.heroku.share.Message;
+import ag.ifpb.pod.rmi.heroku.share.TopicManager;
 
 @SuppressWarnings("serial")
 public class TopicManagerImpl extends UnicastRemoteObject implements TopicManager {

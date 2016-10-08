@@ -9,8 +9,8 @@ import java.rmi.registry.Registry;
 import org.restlet.Component;
 import org.restlet.data.Protocol;
 
-import ag.ifpb.pod.rmi.heroku.service.TopicManager;
 import ag.ifpb.pod.rmi.heroku.service.TopicManagerImpl;
+import ag.ifpb.pod.rmi.heroku.share.TopicManager;
 
 public class App {
   

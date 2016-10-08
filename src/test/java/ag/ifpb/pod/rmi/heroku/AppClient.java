@@ -11,11 +11,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 
-import ag.ifpb.pod.rmi.heroku.service.TopicManager;
 import ag.ifpb.pod.rmi.heroku.share.Message;
 import ag.ifpb.pod.rmi.heroku.share.Polling;
 import ag.ifpb.pod.rmi.heroku.share.Publisher;
 import ag.ifpb.pod.rmi.heroku.share.Topic;
+import ag.ifpb.pod.rmi.heroku.share.TopicManager;
 
 public class AppClient {
 
