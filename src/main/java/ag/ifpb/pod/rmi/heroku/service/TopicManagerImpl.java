@@ -44,13 +44,12 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
     //
     List<String> uuids = subscribers;
     for (String suuid : uuids) {
-      //
-      List<Message> notifications = messages.get(suuid);
-      if (notifications.isEmpty()) continue;
-      //
-      result.addAll(notifications);
-      //
-      notifications.clear();
+      if (!suuid.equals(uuid)){
+        List<Message> notifications = messages.get(suuid);
+        if (notifications.isEmpty()) continue;
+        result.addAll(notifications);
+        notifications.clear();
+      }
     }
     //
     return result;
