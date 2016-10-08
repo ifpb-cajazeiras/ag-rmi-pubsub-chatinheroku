@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import ag.ifpb.pod.rmi.heroku.Debug;
 import ag.ifpb.pod.rmi.heroku.share.Message;
@@ -14,7 +13,6 @@ import ag.ifpb.pod.rmi.heroku.share.Subscriber;
 
 @SuppressWarnings("serial")
 public class TopicManagerImpl extends UnicastRemoteObject implements TopicManager {
-  //private Map<String, Subscriber> subscribers = new HashMap<String, Subscriber>();
   private List<String> subscribers = new ArrayList<String>();
   private Map<String, List<Message>> messages = new HashMap<String, List<Message>>();
   
@@ -23,7 +21,6 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
   //@Override
   public void register(String uuid, Subscriber subscriber) throws RemoteException {
     Debug.info("registrando um subscriber: " + uuid);
-    //subscribers.put(uuid, subscriber);
     subscribers.add(uuid);
     messages.put(uuid, new ArrayList<Message>());
   }
@@ -31,7 +28,6 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
   //@Override
   public void publish(Message message) throws RemoteException {
     Debug.info("publicando uma mensagem de: " + message.from());
-    //Set<String> uuids = subscribers.keySet();
     List<String> uuids = subscribers;
     for (String uuid : uuids) {
       if (!uuid.equals(message.from())){
@@ -41,24 +37,22 @@ public class TopicManagerImpl extends UnicastRemoteObject implements TopicManage
     }
   }
   
-  //@Override
-  public void notifySubscribers() throws RemoteException {
-    //Set<String> uuids = subscribers.keySet();
+  public List<Message> poll(String uuid) throws RemoteException {
+    //
+    List<Message> result = new ArrayList<Message>();
+    //
     List<String> uuids = subscribers;
-    for (String uuid : uuids) {
+    for (String suuid : uuids) {
       //
-      //Subscriber subscriber = subscribers.get(uuid);
-      //
-      List<Message> notifications = messages.get(uuid);
+      List<Message> notifications = messages.get(suuid);
       if (notifications.isEmpty()) continue;
       //
-      for (Message message : notifications) {
-        Debug.info("notificando " + uuid + " com mensagem de " + message.from());
-        //subscriber.update(message);
-      }
+      result.addAll(notifications);
       //
       notifications.clear();
     }
+    //
+    return result;
   }
 
 }

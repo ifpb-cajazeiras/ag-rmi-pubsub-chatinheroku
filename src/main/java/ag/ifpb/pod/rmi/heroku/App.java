@@ -35,19 +35,6 @@ public class App {
     //
     Registry registry = LocateRegistry.createRegistry(1099);
     registry.bind("__ChatServer__", manager);
-    //
-//    Timer timer = new Timer();
-//    timer.schedule(new TimerTask() {
-//      @Override
-//      public void run() {
-//        try {
-//          manager.notifySubscribers();
-//        } catch (RemoteException e) {
-//          e.printStackTrace();
-//        }
-//      }
-//    }, 1000, 10000);//1s, 10s
-    //
   }
   
   public static void main(String[] args) throws Exception {

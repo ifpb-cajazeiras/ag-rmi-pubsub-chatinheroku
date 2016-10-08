@@ -2,13 +2,18 @@ package ag.ifpb.pod.rmi.heroku;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.RMISocketFactory;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
+import ag.ifpb.pod.rmi.heroku.service.TopicManager;
 import ag.ifpb.pod.rmi.heroku.share.Message;
+import ag.ifpb.pod.rmi.heroku.share.Polling;
 import ag.ifpb.pod.rmi.heroku.share.Publisher;
 import ag.ifpb.pod.rmi.heroku.share.Topic;
 
@@ -24,14 +29,28 @@ public class AppClient {
   }
   
   public static void main(String[] args) throws NotBoundException, IOException {
-    String uuid = UUID.randomUUID().toString();
+    final String uuid = UUID.randomUUID().toString();
     //
     Registry registry = getRegistry();
-    Topic topic = (Topic) registry.lookup("__ChatServer__");
-    Publisher publisher = (Publisher) registry.lookup("__ChatServer__");
+    TopicManager manager = (TopicManager) registry.lookup("__ChatServer__");
+    Topic topic = (Topic) manager;
+    Publisher publisher = (Publisher) manager;
+    Polling polling = (Polling) manager;
     //
-    ChatClientImpl client = new ChatClientImpl(publisher);
+    final ChatClientImpl client = new ChatClientImpl(uuid, publisher, polling);
     topic.register(uuid, client);
+    //
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+        try {
+          client.update();
+        } catch (RemoteException e) {
+          e.printStackTrace();
+        }
+      }
+    }, 1000, 10000);//1s, 10s
     //
     Scanner scanner = new Scanner(System.in);
     while(true){
