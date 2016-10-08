@@ -2,7 +2,6 @@ package ag.ifpb.pod.rmi.heroku;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.RMISocketFactory;
@@ -17,8 +16,8 @@ public class AppClient {
 
   @SuppressWarnings("restriction")
   private static Registry getRegistry() throws IOException{
-    //String url = "ag-rmi-pubsub-chatinheroku.herokuapp.com";
-    String url = "localhost";
+    String url = "ag-rmi-pubsub-chatinheroku.herokuapp.com";
+    //String url = "localhost";
     RMISocketFactory.setSocketFactory(new sun.rmi.transport.proxy.RMIHttpToCGISocketFactory());
     return LocateRegistry.getRegistry(
         url, 1099, RMISocketFactory.getSocketFactory());
@@ -45,5 +44,6 @@ public class AppClient {
       //
       client.sendMessage(message);
     }
+    //
   }
 }

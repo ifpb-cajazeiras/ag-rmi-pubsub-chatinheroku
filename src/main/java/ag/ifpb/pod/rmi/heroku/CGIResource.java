@@ -34,6 +34,8 @@ public class CGIResource extends ServerResource {
     byte[] r = new byte[rsize];
     resp.getStream().read(r);
     //
+    bar.release();
+    resp.release();
     resource.release();
     //
     ByteArrayRepresentation barr = new ByteArrayRepresentation(r);
