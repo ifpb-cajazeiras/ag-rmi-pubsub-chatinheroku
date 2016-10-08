@@ -1,0 +1,1 @@
+web: java $JAVA_OPTS -Djava.rmi.server.hostname=ag-rmi-pubsub-chatinheroku.herokuapp.com -cp target/classes:target/dependency/* ag.ifpb.pod.rmi.heroku.App
