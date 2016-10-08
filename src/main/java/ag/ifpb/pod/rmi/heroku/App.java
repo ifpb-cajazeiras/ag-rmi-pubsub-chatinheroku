@@ -20,6 +20,7 @@ public class App {
     //
     Component component = new Component();
     component.getServers().add(Protocol.HTTP, port);
+    component.getServers().add(new Protocol("http", "HTTP", "", 80, "1.0"), port);
     //
     RMIApplication application = new RMIApplication();
     component.getDefaultHost().attach(application);
